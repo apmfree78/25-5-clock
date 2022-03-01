@@ -46,9 +46,8 @@ class App extends React.Component {
         currentTime = sessionLength * 60;
       }
       //RING ALARM now that session has changed
-      const alarm = new Audio();
-      //assigning drumsound file
-      alarm.src = "../public/household_alarm_clock_beep_tone.mp3";
+      const alarm = new Audio("household_alarm_clock_beep_tone.mp3");
+
       //setting volume
       alarm.volume = 0.5;
       alarm.play();
