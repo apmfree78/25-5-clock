@@ -19,25 +19,25 @@ class App extends React.Component {
         <div id='settings' className='d-flex justify-content-around'>
           <div className='length'>
             <h3 id='break-label'>Break Length</h3>
-            <i class='fa fa-arrow-up' id='break-increment' />
+            <i class='fa fa-arrow-up fa-lg' id='break-increment' />
             <span id='break-length'>{breakLength}</span>
-            <i class='fa fa-arrow-down' id='break-decrement' />
+            <i class='fa fa-arrow-down fa-lg' id='break-decrement' />
           </div>
           <div className='length'>
             <h3 id='session-label'>Session Length</h3>
-            <i class='fa fa-arrow-up' id='session-increment' />
+            <i class='fa fa-arrow-up fa-lg' id='session-increment' />
             <span id='session-length'>{sessionLength}</span>
-            <i class='fa fa-arrow-down' id='session-decrement' />
+            <i class='fa fa-arrow-down fa-lg' id='session-decrement' />
           </div>
         </div>
         <div id='timer'>
-          <h3 id='timer-label'>{mode}</h3>
-          <h2 id='time-left'>{currentTime}</h2>
+          <div id='timer-label'>{mode}</div>
+          <div id='time-left'>{currentTime}</div>
         </div>
         <div id='controls'>
-          <i id='start' className='fa fa-play' />
-          <i id='stop' className='fa fa-pause' />
-          <i id='reset' className='fa fa-refresh' />
+          <i id='start' className='fa fa-play fa-2x' />
+          <i id='stop' className='fa fa-pause fa-2x' />
+          <i id='reset' className='fa fa-refresh fa-2x' />
         </div>
       </div> /* id=clock */
     );
