@@ -1,5 +1,7 @@
 import React from 'react';
 
+//component that shows Break Length and Session Length
+//with up and down arrows to change the break and Session Length
 const Settings = ({ length, changeLength, children }) => {
   const mode = children;
 

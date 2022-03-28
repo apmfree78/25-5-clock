@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Settings from './Settings';
+import Timer from './Timer';
 
 //setting initial states
 const _break = 5;
@@ -7,12 +8,6 @@ const _session = 25;
 const _playing = false;
 const _current = 25 * 60;
 const _mode = 'Session';
-
-//take seconds and returns mm:ss format as string
-const displayTime = (seconds) =>
-  `${Math.floor(seconds / 60)
-    .toString()
-    .padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`;
 
 const App = () => {
   /* state variables
@@ -24,11 +19,8 @@ const App = () => {
   }; */
   const [length, setLength] = useState({ break: _break, session: _session });
   const [isPlaying, setIsPlaying] = useState(_playing);
-  const [currentTime, setCurrentTime] = useState(_current);
+  const [currentTime, setTime] = useState(_current);
   const [mode, setMode] = useState(_mode);
-
-  //setting empty function to use hold setInterval return value
-  function interval() {}
 
   //callback function for setInternal
   //function will be repeated each second
@@ -40,16 +32,17 @@ const App = () => {
 
     //reducing currentTime
     _currentTime -= 1;
+    // console.log(`current time: ${_currentTime}`);
 
     // checking if current mode, break or session is complete
     if (_currentTime < 0) {
       //switching mode and resetting currentTime to reflect mode change
       if (currentMode == 'Session') {
         currentMode = 'Break';
-        _currentTime = breakLength * 60;
+        _currentTime = length.break * 60;
       } else {
         currentMode = 'Session';
-        _currentTime = sessionLength * 60;
+        _currentTime = length.session * 60;
       }
       //RING ALARM now that session has changed
       const alarm = new Audio('household_alarm_clock_beep_tone.mp3');
@@ -61,51 +54,27 @@ const App = () => {
 
     //finally setting state
     // this.setState({ currentTime, mode });
-    setCurrentTime(_currentTime);
+    setTime(_currentTime);
     setMode(currentMode);
   };
 
-  const playTimer = () => {
-    //checking timer is running
-    if (!isPlaying) {
-      //only starting play, if timer was stopped
-      //set isPlaying to true
-      setIsPlaying(true);
+  //only starting play, if timer was stopped
+  //set isPlaying to true
+  const playTimer = () => !isPlaying && setIsPlaying(true);
 
-      //starting timer using CountDown method
-      interval = setInterval(countDown, 1000);
-    }
-  };
-
-  const stopTimer = () => {
-    //checking timer is running
-    if (isPlaying) {
-      //only stopping timer if it's running!!
-
-      //set isPlaying to false
-      setIsPlaying(false);
-
-      //stop timer
-      clearInterval(interval);
-    }
-  };
+  //stop timer if it's on
+  const stopTimer = () => isPlaying && setIsPlaying(false);
 
   // reset state to initial values
   const refresh = () => {
     //if timer is running, stop it
     //set isPlaying to false
-    if (isPlaying) {
-      //only stopping timer if it's running!!
+    if (isPlaying) setIsPlaying(false);
 
-      //set isPlaying to false
-      setIsPlaying(false);
-
-      //stop timer
-      clearInterval(interval);
-    }
+    //restate state to default values
     setLength({ break: _break, session: _session }); //break & session length in minutes
     setIsPlaying(_playing); //is clock on? boolean play => true, pause = false
-    setCurrentTime(_current); //current time in seconds
+    setTime(_current); //current time in seconds
     setMode(_mode); // OR 'Break' are we on break or in a session?
   };
 
@@ -130,9 +99,24 @@ const App = () => {
 
         //setting state
         setLength({ break: breaklength, session: sessionlength });
+        setTime(_currentTime);
       }
     }
   };
+
+  //useEffect to setInterval and clearInterval for timer
+  useEffect(() => {
+    //itializing timer
+    // console.log('useEffect instance');
+    const interval = setInterval(countDown, 1000);
+
+    //if timer is stopped , or never started
+    //then clear interval
+    if (!isPlaying) clearInterval(interval);
+
+    //on unmount clear interval
+    return () => clearInterval(interval);
+  });
 
   return (
     <div id='clock'>
@@ -145,10 +129,7 @@ const App = () => {
           Session
         </Settings>
       </div>
-      <div id='timer'>
-        <div id='timer-label'>{mode}</div>
-        <div id='time-left'>{displayTime(currentTime)}</div>
-      </div>
+      <Timer mode={mode}>{currentTime}</Timer>
       <div id='controls'>
         <i id='start' className='fa fa-play fa-2x' onClick={playTimer} />
         <i id='stop' className='fa fa-pause fa-2x' onClick={stopTimer} />
