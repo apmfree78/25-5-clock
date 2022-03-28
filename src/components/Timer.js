@@ -6,6 +6,8 @@ const displayTime = (seconds) =>
     .toString()
     .padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`;
 
+// show current time on timer and mode
+//note current time is passed down as children from App.js
 const Timer = ({ mode, children }) => {
   return (
     <div id='timer'>

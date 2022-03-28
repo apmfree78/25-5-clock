@@ -121,6 +121,8 @@ const App = () => {
   return (
     <div id='clock'>
       <h1>25+5 Clock</h1>
+      {/* component that shows current break length and session Length
+      and lets user adjust it */}
       <div id='settings' className='d-flex justify-content-around'>
         <Settings length={length} changeLength={changeLength}>
           Break
@@ -129,7 +131,9 @@ const App = () => {
           Session
         </Settings>
       </div>
+      {/* main timer that display the current time left */}
       <Timer mode={mode}>{currentTime}</Timer>
+      {/* controls to start, pause, and reset timer  */}
       <div id='controls'>
         <i id='start' className='fa fa-play fa-2x' onClick={playTimer} />
         <i id='stop' className='fa fa-pause fa-2x' onClick={stopTimer} />
